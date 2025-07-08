@@ -52,7 +52,6 @@ const config: Config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
-        // Custom brand colors
         brand: {
           red: "#dc2626",
           "red-light": "#ef4444",
