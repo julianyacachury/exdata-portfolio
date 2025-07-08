@@ -10,6 +10,7 @@ import ProjectCard from "@/components/project-card"
 import ServiceCard from "@/components/service-card"
 import { projects as projectsData } from "@/lib/data"
 import { useLanguage } from "@/contexts/language-context"
+import React from 'react'
 
 export default function Home() {
   const { t } = useLanguage()
@@ -78,7 +79,7 @@ export default function Home() {
   return (
     <div className="flex min-h-screen flex-col">
       {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-brand-red to-brand-red-light px-4 py-24 text-white md:px-6 lg:px-8 lg:py-32">
+      <section className="relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-red-600 to-red-400 px-4 py-24 text-white md:px-6 lg:px-8 lg:py-32">
         <div className="absolute inset-0 z-0 opacity-20">
           <DataVisualization />
         </div>
@@ -320,7 +321,7 @@ export default function Home() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-gradient-to-br from-brand-red to-brand-red-light px-4 py-16 text-white md:px-6 lg:px-8 lg:py-24">
+      <section className="bg-gradient-to-br from-red-600 to-red-400 px-4 py-16 text-white md:px-6 lg:px-8 lg:py-24">
         <motion.div
           className="container mx-auto max-w-4xl text-center"
           initial={{ opacity: 0, y: 20 }}
