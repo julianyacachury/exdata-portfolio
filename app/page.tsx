@@ -1,213 +1,277 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
-import { Github, Linkedin, Mail, ExternalLink, Code, Database, Globe, Smartphone } from "lucide-react"
+import { Menu, X } from "lucide-react"
+import { useState, useEffect, useRef } from "react"
 
-export default function HomePage() {
-  const projects = [
-    {
-      title: "E-Commerce Platform",
-      description: "Full-stack e-commerce solution with React, Node.js, and MongoDB",
-      technologies: ["React", "Node.js", "MongoDB", "Stripe"],
-      githubUrl: "https://github.com/julianyacachury/ecommerce",
-      liveUrl: "https://your-ecommerce-demo.com",
-      image: "/placeholder.svg?height=200&width=400",
-    },
-    {
-      title: "Task Management App",
-      description: "Collaborative task management tool with real-time updates",
-      technologies: ["Next.js", "TypeScript", "Prisma", "PostgreSQL"],
-      githubUrl: "https://github.com/julianyacachury/taskmanager",
-      liveUrl: "https://your-taskmanager-demo.com",
-      image: "/placeholder.svg?height=200&width=400",
-    },
-    {
-      title: "Weather Dashboard",
-      description: "Beautiful weather dashboard with location-based forecasts",
-      technologies: ["Vue.js", "API Integration", "Chart.js"],
-      githubUrl: "https://github.com/julianyacachury/weather",
-      liveUrl: "https://your-weather-demo.com",
-      image: "/placeholder.svg?height=200&width=400",
-    },
-  ]
+// Animated Neural Network Background Component
+function NeuralNetworkBackground() {
+  const canvasRef = useRef<HTMLCanvasElement>(null)
 
-  const skills = [
-    {
-      name: "Frontend",
-      icon: <Globe className="h-6 w-6" />,
-      technologies: ["React", "Next.js", "Vue.js", "TypeScript"],
-    },
-    {
-      name: "Backend",
-      icon: <Database className="h-6 w-6" />,
-      technologies: ["Node.js", "Python", "PostgreSQL", "MongoDB"],
-    },
-    {
-      name: "Mobile",
-      icon: <Smartphone className="h-6 w-6" />,
-      technologies: ["React Native", "Flutter", "iOS", "Android"],
-    },
-    {
-      name: "DevOps",
-      icon: <Code className="h-6 w-6" />,
-      technologies: ["Docker", "AWS", "CI/CD", "Kubernetes"],
-    },
-  ]
+  useEffect(() => {
+    const canvas = canvasRef.current
+    if (!canvas) return
+
+    const ctx = canvas.getContext("2d")
+    if (!ctx) return
+
+    // Set canvas size
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth
+      canvas.height = window.innerHeight
+    }
+    resizeCanvas()
+    window.addEventListener("resize", resizeCanvas)
+
+    // Neural network nodes
+    const nodes: Array<{
+      x: number
+      y: number
+      vx: number
+      vy: number
+      connections: number[]
+    }> = []
+
+    // Create nodes
+    const nodeCount = 50
+    for (let i = 0; i < nodeCount; i++) {
+      nodes.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: (Math.random() - 0.5) * 0.5,
+        connections: [],
+      })
+    }
+
+    // Animation loop
+    const animate = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+
+      // Update node positions
+      nodes.forEach((node) => {
+        node.x += node.vx
+        node.y += node.vy
+
+        // Bounce off edges
+        if (node.x <= 0 || node.x >= canvas.width) node.vx *= -1
+        if (node.y <= 0 || node.y >= canvas.height) node.vy *= -1
+
+        // Keep nodes in bounds
+        node.x = Math.max(0, Math.min(canvas.width, node.x))
+        node.y = Math.max(0, Math.min(canvas.height, node.y))
+      })
+
+      // Draw connections
+      ctx.strokeStyle = "rgba(56, 189, 248, 0.2)" // Light blue connections
+      ctx.lineWidth = 1
+
+      for (let i = 0; i < nodes.length; i++) {
+        for (let j = i + 1; j < nodes.length; j++) {
+          const dx = nodes[i].x - nodes[j].x
+          const dy = nodes[i].y - nodes[j].y
+          const distance = Math.sqrt(dx * dx + dy * dy)
+
+          if (distance < 150) {
+            const opacity = ((150 - distance) / 150) * 0.3
+            ctx.strokeStyle = `rgba(56, 189, 248, ${opacity})`
+            ctx.beginPath()
+            ctx.moveTo(nodes[i].x, nodes[i].y)
+            ctx.lineTo(nodes[j].x, nodes[j].y)
+            ctx.stroke()
+          }
+        }
+      }
+
+      // Draw nodes
+      ctx.fillStyle = "rgba(56, 189, 248, 0.6)" // Light blue nodes
+      nodes.forEach((node) => {
+        ctx.beginPath()
+        ctx.arc(node.x, node.y, 2, 0, Math.PI * 2)
+        ctx.fill()
+      })
+
+      requestAnimationFrame(animate)
+    }
+
+    animate()
+
+    return () => {
+      window.removeEventListener("resize", resizeCanvas)
+    }
+  }, [])
 
   return (
-    <div className="flex min-h-screen flex-col">
-      {/* Hero Section */}
-      <section className="relative flex flex-col items-center justify-center overflow-hidden bg-gradient-to-br from-red-600 to-red-400 px-4 py-24 text-white md:px-6 lg:px-8 lg:py-32">
-        <div className="absolute inset-0 z-0 opacity-20">
-          <div className="absolute inset-0 bg-[url('/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]" />
+    <canvas
+      ref={canvasRef}
+      className="absolute inset-0 w-full h-full"
+      style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)" }}
+    />
+  )
+}
+
+// Navigation component
+function Navigation() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
+  return (
+    <nav className="relative z-50 w-full bg-white shadow-sm">
+      <div className="max-w-7xl mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          {/* Logo */}
+          <div className="bg-slate-900 text-white px-4 py-2 rounded font-bold text-lg">Exdata</div>
+
+          {/* Desktop Navigation */}
+          <div className="hidden lg:flex items-center space-x-8">
+            <a href="#home" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              Home
+            </a>
+            <a href="#about" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              About
+            </a>
+            <a href="#services" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              Services
+            </a>
+            <a href="#projects" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              Projects
+            </a>
+            <a href="#technologies" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              Technologies
+            </a>
+            <a href="#team" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              Team
+            </a>
+            <Button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-md font-medium">
+              Contact Us
+            </Button>
+          </div>
+
+          {/* Mobile Menu Button */}
+          <button className="lg:hidden text-slate-900" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+          </button>
         </div>
 
-        <div className="relative z-10 text-center">
-          <h1 className="mb-6 text-4xl font-bold tracking-tight sm:text-6xl lg:text-7xl">
-            Hi, I'm{" "}
-            <span className="bg-gradient-to-r from-yellow-400 to-orange-500 bg-clip-text text-transparent">Julian</span>
+        {/* Mobile Navigation */}
+        {isMenuOpen && (
+          <div className="lg:hidden mt-4 pb-4 border-t border-gray-200">
+            <div className="flex flex-col space-y-4 pt-4">
+              <a href="#home" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+                Home
+              </a>
+              <a href="#about" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+                About
+              </a>
+              <a href="#services" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+                Services
+              </a>
+              <a href="#projects" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+                Projects
+              </a>
+              <a href="#technologies" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+                Technologies
+              </a>
+              <a href="#team" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+                Team
+              </a>
+              <Button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-md font-medium w-fit">
+                Contact Us
+              </Button>
+            </div>
+          </div>
+        )}
+      </div>
+    </nav>
+  )
+}
+
+export default function HomePage() {
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
+
+  return (
+    <div className="min-h-screen bg-white">
+      {/* Navigation */}
+      <Navigation />
+
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
+        {/* Animated Neural Network Background */}
+        <NeuralNetworkBackground />
+
+        {/* Hero Content */}
+        <div className="relative z-10 max-w-6xl mx-auto px-6 text-center">
+          {/* Main Heading */}
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
+            <span className="text-white block mb-2">Advanced Analytics &</span>
+            <span className="text-sky-400 block">Problem-Solving Expertise</span>
           </h1>
-          <p className="mx-auto mb-8 max-w-2xl text-xl text-red-100 sm:text-2xl">
-            Full-Stack Developer passionate about creating beautiful, functional web applications
+
+          {/* Subtitle */}
+          <p className="text-lg md:text-xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+            Exdata combines deep analytical expertise with cutting-edge AI to solve complex problems and drive
+            innovation across industries.
           </p>
-          <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" className="bg-white text-red-600 hover:bg-red-50">
-              <Mail className="mr-2 h-5 w-5" />
-              Get In Touch
+
+          {/* Action Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Button
+              size="lg"
+              className="bg-slate-900 hover:bg-slate-800 text-white px-8 py-3 text-lg font-semibold rounded-md transition-all duration-300 shadow-lg hover:shadow-xl"
+            >
+              Our Services
             </Button>
+
             <Button
               size="lg"
               variant="outline"
-              className="border-white text-white hover:bg-white hover:text-red-600 bg-transparent"
+              className="bg-white text-slate-900 border-white hover:bg-slate-50 px-8 py-3 text-lg font-semibold rounded-md transition-all duration-300 shadow-lg hover:shadow-xl"
             >
-              <Github className="mr-2 h-5 w-5" />
-              View GitHub
+              View Projects
             </Button>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="px-4 py-16 md:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">About Me</h2>
-            <p className="mx-auto mb-12 max-w-3xl text-lg text-muted-foreground">
-              I'm a passionate full-stack developer with over 5 years of experience building web applications. I love
-              turning complex problems into simple, beautiful designs and creating seamless user experiences.
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-4">
-            {skills.map((skill, index) => (
-              <Card key={index} className="text-center">
-                <CardHeader>
-                  <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 text-red-600">
-                    {skill.icon}
-                  </div>
-                  <CardTitle className="text-xl">{skill.name}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="flex flex-wrap justify-center gap-2">
-                    {skill.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="secondary" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Projects Section */}
-      <section className="bg-muted/50 px-4 py-16 md:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl">
-          <div className="text-center">
-            <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">Featured Projects</h2>
-            <p className="mx-auto mb-12 max-w-3xl text-lg text-muted-foreground">
-              Here are some of my recent projects that showcase my skills and experience.
-            </p>
-          </div>
-
-          <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
-            {projects.map((project, index) => (
-              <Card key={index} className="overflow-hidden">
-                <div className="aspect-video bg-muted">
-                  <img
-                    src={project.image || "/placeholder.svg"}
-                    alt={project.title}
-                    className="h-full w-full object-cover"
-                  />
-                </div>
-                <CardHeader>
-                  <CardTitle className="text-xl">{project.title}</CardTitle>
-                  <CardDescription>{project.description}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="mb-4 flex flex-wrap gap-2">
-                    {project.technologies.map((tech, techIndex) => (
-                      <Badge key={techIndex} variant="outline" className="text-xs">
-                        {tech}
-                      </Badge>
-                    ))}
-                  </div>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={project.githubUrl} target="_blank" rel="noopener noreferrer">
-                        <Github className="mr-2 h-4 w-4" />
-                        Code
-                      </a>
-                    </Button>
-                    <Button size="sm" asChild>
-                      <a href={project.liveUrl} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink className="mr-2 h-4 w-4" />
-                        Live Demo
-                      </a>
-                    </Button>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Contact Section */}
-      <section className="px-4 py-16 md:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          <h2 className="mb-4 text-3xl font-bold tracking-tight sm:text-4xl">Let's Work Together</h2>
-          <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
-            I'm always interested in new opportunities and exciting projects. Let's discuss how we can bring your ideas
-            to life.
+      {/* Additional sections */}
+      <section id="about" className="py-20 bg-slate-50">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8">About Exdata</h2>
+          <p className="text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">
+            We are a team of data scientists, analysts, and AI specialists dedicated to transforming complex data into
+            actionable insights that drive business success across multiple industries.
           </p>
-          <div className="flex flex-col gap-4 sm:flex-row sm:justify-center">
-            <Button size="lg" asChild>
-              <a href="mailto:julian@example.com">
-                <Mail className="mr-2 h-5 w-5" />
-                Send Email
-              </a>
-            </Button>
-            <Button size="lg" variant="outline" asChild>
-              <a href="https://linkedin.com/in/julianyacachury" target="_blank" rel="noopener noreferrer">
-                <Linkedin className="mr-2 h-5 w-5" />
-                LinkedIn
-              </a>
-            </Button>
-          </div>
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="border-t bg-muted/50 px-4 py-8 md:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl text-center">
-          <p className="text-muted-foreground">© 2024 Julian Yacachury. All rights reserved.</p>
+      <section id="services" className="py-20 bg-white">
+        <div className="max-w-6xl mx-auto px-6 text-center">
+          <h2 className="text-3xl md:text-4xl font-bold text-slate-900 mb-8">Our Services</h2>
+          <div className="grid md:grid-cols-3 gap-8 mt-12">
+            <div className="p-6 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">Data Analytics</h3>
+              <p className="text-slate-600">
+                Advanced statistical analysis and data visualization to uncover insights.
+              </p>
+            </div>
+            <div className="p-6 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">AI Solutions</h3>
+              <p className="text-slate-600">Custom AI and machine learning solutions for complex business problems.</p>
+            </div>
+            <div className="p-6 rounded-lg bg-slate-50 hover:bg-slate-100 transition-colors">
+              <h3 className="text-xl font-semibold text-slate-900 mb-4">Consulting</h3>
+              <p className="text-slate-600">Strategic consulting to help organizations leverage data effectively.</p>
+            </div>
+          </div>
         </div>
-      </footer>
+      </section>
     </div>
   )
 }
