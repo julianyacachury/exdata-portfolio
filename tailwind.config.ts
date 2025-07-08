@@ -1,12 +1,11 @@
 import type { Config } from "tailwindcss"
 
-const config = {
+const config: Config = {
   darkMode: ["class"],
   content: [
-    "./pages/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
-    "./app/**/*.{ts,tsx}",
-    "./src/**/*.{ts,tsx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
     "*.{js,ts,jsx,tsx,mdx}",
   ],
   prefix: "",
@@ -20,14 +19,6 @@ const config = {
     },
     extend: {
       colors: {
-        brand: {
-          red: "#B91C1C", // Deep red (replacing blue)
-          crimson: "#E11D48", // Bright red (replacing mint)
-          "crimson-light": "#F43F5E", // Light red (replacing mint-light)
-          "crimson-dark": "#BE123C", // Dark red (replacing mint-dark)
-          "red-light": "#DC2626", // Light red (replacing blue-light)
-          "red-dark": "#991B1B", // Dark red (replacing blue-dark)
-        },
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -61,6 +52,11 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // Custom brand colors
+        brand: {
+          red: "#dc2626",
+          "red-light": "#ef4444",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -87,4 +83,3 @@ const config = {
 } satisfies Config
 
 export default config
-
