@@ -63,7 +63,7 @@ function NeuralNetworkBackground() {
       })
 
       // Draw connections
-      ctx.strokeStyle = "rgba(56, 189, 248, 0.2)" // Light blue connections
+      ctx.strokeStyle = "rgba(59, 130, 246, 0.15)" // Blue connections
       ctx.lineWidth = 1
 
       for (let i = 0; i < nodes.length; i++) {
@@ -73,8 +73,8 @@ function NeuralNetworkBackground() {
           const distance = Math.sqrt(dx * dx + dy * dy)
 
           if (distance < 150) {
-            const opacity = ((150 - distance) / 150) * 0.3
-            ctx.strokeStyle = `rgba(56, 189, 248, ${opacity})`
+            const opacity = ((150 - distance) / 150) * 0.2
+            ctx.strokeStyle = `rgba(59, 130, 246, ${opacity})`
             ctx.beginPath()
             ctx.moveTo(nodes[i].x, nodes[i].y)
             ctx.lineTo(nodes[j].x, nodes[j].y)
@@ -84,7 +84,7 @@ function NeuralNetworkBackground() {
       }
 
       // Draw nodes
-      ctx.fillStyle = "rgba(56, 189, 248, 0.6)" // Light blue nodes
+      ctx.fillStyle = "rgba(59, 130, 246, 0.4)" // Blue nodes
       nodes.forEach((node) => {
         ctx.beginPath()
         ctx.arc(node.x, node.y, 2, 0, Math.PI * 2)
@@ -105,7 +105,7 @@ function NeuralNetworkBackground() {
     <canvas
       ref={canvasRef}
       className="absolute inset-0 w-full h-full"
-      style={{ background: "linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%)" }}
+      style={{ background: "linear-gradient(135deg, #1e293b 0%, #334155 50%, #475569 100%)" }}
     />
   )
 }
@@ -118,36 +118,36 @@ function Navigation() {
     <nav className="relative z-50 w-full bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-6 py-4">
         <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="bg-slate-900 text-white px-4 py-2 rounded font-bold text-lg">Exdata</div>
+          {/* Logo - matching the blue theme */}
+          <div className="bg-slate-800 text-white px-4 py-2 rounded font-bold text-lg">Exdata</div>
 
-          {/* Desktop Navigation */}
+          {/* Desktop Navigation - no EN button */}
           <div className="hidden lg:flex items-center space-x-8">
-            <a href="#home" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+            <a href="#home" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
               Home
             </a>
-            <a href="#about" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+            <a href="#about" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
               About
             </a>
-            <a href="#services" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+            <a href="#services" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
               Services
             </a>
-            <a href="#projects" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+            <a href="#projects" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
               Projects
             </a>
-            <a href="#technologies" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+            <a href="#technologies" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
               Technologies
             </a>
-            <a href="#team" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+            <a href="#team" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
               Team
             </a>
-            <Button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-md font-medium">
+            <Button className="bg-slate-800 hover:bg-slate-700 text-white px-6 py-2 rounded-md font-medium">
               Contact Us
             </Button>
           </div>
 
           {/* Mobile Menu Button */}
-          <button className="lg:hidden text-slate-900" onClick={() => setIsMenuOpen(!isMenuOpen)}>
+          <button className="lg:hidden text-slate-800" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -156,25 +156,25 @@ function Navigation() {
         {isMenuOpen && (
           <div className="lg:hidden mt-4 pb-4 border-t border-gray-200">
             <div className="flex flex-col space-y-4 pt-4">
-              <a href="#home" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              <a href="#home" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
                 Home
               </a>
-              <a href="#about" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              <a href="#about" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
                 About
               </a>
-              <a href="#services" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              <a href="#services" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
                 Services
               </a>
-              <a href="#projects" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              <a href="#projects" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
                 Projects
               </a>
-              <a href="#technologies" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              <a href="#technologies" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
                 Technologies
               </a>
-              <a href="#team" className="text-gray-700 hover:text-slate-900 transition-colors font-medium">
+              <a href="#team" className="text-gray-600 hover:text-slate-800 transition-colors font-medium">
                 Team
               </a>
-              <Button className="bg-slate-900 hover:bg-slate-800 text-white px-6 py-2 rounded-md font-medium w-fit">
+              <Button className="bg-slate-800 hover:bg-slate-700 text-white px-6 py-2 rounded-md font-medium w-fit">
                 Contact Us
               </Button>
             </div>
@@ -211,7 +211,7 @@ export default function HomePage() {
           {/* Main Heading */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
             <span className="text-white block mb-2">Advanced Analytics &</span>
-            <span className="text-sky-400 block">Problem-Solving Expertise</span>
+            <span className="text-blue-400 block">Problem-Solving Expertise</span>
           </h1>
 
           {/* Subtitle */}
