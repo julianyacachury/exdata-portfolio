@@ -11,8 +11,6 @@ import { useState } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Button } from "@/components/ui/button"
 import "./globals.css"
-import { LanguageProvider, useLanguage } from "@/contexts/language-context"
-import LanguageSelector from "@/components/language-selector"
 import ScrollToTopButton from "@/components/scroll-to-top-button"
 
 const inter = Inter({ subsets: ["latin"] })
@@ -22,16 +20,11 @@ export default function ClientLayout({
 }: {
   children: React.ReactNode
 }) {
-  return (
-    <LanguageProvider>
-      <ClientLayoutContent>{children}</ClientLayoutContent>
-    </LanguageProvider>
-  )
+  return <ClientLayoutContent>{children}</ClientLayoutContent>
 }
 
 function ClientLayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const { language } = useLanguage()
 
   // Scroll to top when pathname changes
   useEffect(() => {
@@ -39,7 +32,7 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
   }, [pathname])
 
   return (
-    <html lang={language}>
+    <html lang="en">
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="light">
           <div className="flex min-h-screen flex-col">
@@ -56,7 +49,6 @@ function ClientLayoutContent({ children }: { children: React.ReactNode }) {
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const { t } = useLanguage()
   const pathname = usePathname()
 
   const toggleMenu = () => {
@@ -65,12 +57,12 @@ function Header() {
 
   // Navigation items with their paths
   const navItems = [
-    { label: t("nav.home"), path: "/" },
-    { label: t("nav.about"), path: "/about" },
-    { label: t("nav.services"), path: "/services" },
-    { label: t("nav.projects"), path: "/projects" },
-    { label: t("nav.technologies"), path: "/technologies" },
-    { label: t("nav.team"), path: "/team" },
+    { label: "Home", path: "/" },
+    { label: "About", path: "/about" },
+    { label: "Services", path: "/services" },
+    { label: "Projects", path: "/projects" },
+    { label: "Technologies", path: "/technologies" },
+    { label: "Team", path: "/team" },
   ]
 
   // Function to check if a nav item is active
@@ -81,48 +73,43 @@ function Header() {
   }
 
   return (
-    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white">
+    <header className="sticky top-0 z-50 border-b border-slate-200 bg-white shadow-sm">
       <div className="container mx-auto flex h-16 items-center justify-between px-4 md:px-6 lg:px-8">
         <Link href="/" className="flex items-center">
-          <span className="bg-brand-red px-3 py-1 rounded text-xl font-bold text-white">Exdata</span>
+          <span className="bg-slate-800 px-3 py-1 rounded text-xl font-bold text-white">Exdata</span>
         </Link>
 
-        {/* Desktop and Mobile language selector - always visible */}
-        <div className="flex items-center">
-          <LanguageSelector />
-
-          {/* Mobile menu button */}
-          <button
-            className="ml-2 block rounded-md p-2 text-slate-800 md:hidden"
-            onClick={toggleMenu}
-            aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-          >
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
+        {/* Mobile menu button */}
+        <button
+          className="block rounded-md p-2 text-slate-800 lg:hidden"
+          onClick={toggleMenu}
+          aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+        >
+          {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+        </button>
 
         {/* Desktop navigation */}
-        <nav className="hidden md:flex md:items-center md:space-x-6">
+        <nav className="hidden lg:flex lg:items-center lg:space-x-6">
           {navItems.map((item) => (
             <Link
               key={item.path}
               href={item.path}
               className={`relative text-sm font-medium transition-colors ${
-                isActive(item.path) ? "text-brand-red font-semibold" : "text-slate-800 hover:text-brand-red"
+                isActive(item.path) ? "text-slate-800 font-semibold" : "text-gray-600 hover:text-slate-800"
               }`}
             >
               {item.label}
-              {isActive(item.path) && <span className="absolute -bottom-1.5 left-0 h-0.5 w-full bg-brand-red" />}
+              {isActive(item.path) && <span className="absolute -bottom-1.5 left-0 h-0.5 w-full bg-slate-800" />}
             </Link>
           ))}
-          <Button asChild className="bg-brand-red hover:bg-brand-red-light text-white">
-            <Link href="/contact">{t("nav.contact")}</Link>
+          <Button asChild className="bg-slate-800 hover:bg-slate-700 text-white">
+            <Link href="/contact">Contact Us</Link>
           </Button>
         </nav>
 
         {/* Mobile navigation */}
         {isMenuOpen && (
-          <div className="absolute left-0 right-0 top-16 z-50 border-b border-slate-200 bg-white p-4 shadow-lg md:hidden">
+          <div className="absolute left-0 right-0 top-16 z-50 border-b border-slate-200 bg-white p-4 shadow-lg lg:hidden">
             <nav className="flex flex-col space-y-4">
               {navItems.map((item) => (
                 <Link
@@ -130,23 +117,23 @@ function Header() {
                   href={item.path}
                   className={`relative rounded-md px-3 py-2 text-sm font-medium ${
                     isActive(item.path)
-                      ? "bg-brand-red/10 text-brand-red font-semibold"
-                      : "text-slate-800 hover:bg-brand-red/10 hover:text-brand-red"
+                      ? "bg-slate-100 text-slate-800 font-semibold"
+                      : "text-gray-600 hover:bg-slate-100 hover:text-slate-800"
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
                   {item.label}
                   {isActive(item.path) && (
-                    <span className="absolute left-0 top-0 bottom-0 w-1 bg-brand-red rounded-l-md" />
+                    <span className="absolute left-0 top-0 bottom-0 w-1 bg-slate-800 rounded-l-md" />
                   )}
                 </Link>
               ))}
               <Button
                 asChild
-                className="w-full bg-brand-red hover:bg-brand-red-light text-white"
+                className="w-full bg-slate-800 hover:bg-slate-700 text-white"
                 onClick={() => setIsMenuOpen(false)}
               >
-                <Link href="/contact">{t("nav.contact")}</Link>
+                <Link href="/contact">Contact Us</Link>
               </Button>
             </nav>
           </div>
@@ -157,19 +144,20 @@ function Header() {
 }
 
 function Footer() {
-  const { t } = useLanguage()
-
   return (
     <footer className="border-t border-slate-200 bg-white px-4 py-12 md:px-6 lg:px-8">
       <div className="container mx-auto">
         <div className="grid gap-8 md:grid-cols-2 lg:grid-cols-3">
           <div>
             <Link href="/" className="mb-4 flex items-center">
-              <span className="bg-brand-red px-3 py-1 rounded text-xl font-bold text-white">Exdata</span>
+              <span className="bg-slate-800 px-3 py-1 rounded text-xl font-bold text-white">Exdata</span>
             </Link>
-            <p className="mb-4 text-sm text-slate-700">{t("footer.description")}</p>
+            <p className="mb-4 text-sm text-slate-700">
+              We combine deep analytical expertise with cutting-edge AI to solve complex problems and drive innovation
+              across industries.
+            </p>
             <div className="flex space-x-4">
-              <a href="#" className="text-brand-crimson/70 hover:text-brand-crimson" aria-label="Twitter">
+              <a href="#" className="text-slate-600 hover:text-slate-800" aria-label="Twitter">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -185,7 +173,7 @@ function Footer() {
                   <path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"></path>
                 </svg>
               </a>
-              <a href="#" className="text-brand-crimson/70 hover:text-brand-crimson" aria-label="LinkedIn">
+              <a href="#" className="text-slate-600 hover:text-slate-800" aria-label="LinkedIn">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -203,7 +191,7 @@ function Footer() {
                   <circle cx="4" cy="4" r="2"></circle>
                 </svg>
               </a>
-              <a href="#" className="text-brand-crimson/70 hover:text-brand-crimson" aria-label="GitHub">
+              <a href="#" className="text-slate-600 hover:text-slate-800" aria-label="GitHub">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="24"
@@ -222,67 +210,60 @@ function Footer() {
             </div>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
-              {t("footer.company")}
-            </h3>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">Company</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/about" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("footer.aboutUs")}
+                <Link href="/about" className="text-sm text-slate-700 hover:text-slate-800">
+                  About Us
                 </Link>
               </li>
               <li>
-                <Link href="/team" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("footer.ourTeam")}
+                <Link href="/team" className="text-sm text-slate-700 hover:text-slate-800">
+                  Our Team
                 </Link>
               </li>
               <li>
-                <Link href="/careers" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("footer.careers")}
+                <Link href="/careers" className="text-sm text-slate-700 hover:text-slate-800">
+                  Careers
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("footer.contact")}
+                <Link href="/contact" className="text-sm text-slate-700 hover:text-slate-800">
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
           <div>
-            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">
-              {t("footer.services")}
-            </h3>
+            <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-slate-900">Services</h3>
             <ul className="space-y-2">
               <li>
-                <Link href="/services" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("service.analytics")}
+                <Link href="/services" className="text-sm text-slate-700 hover:text-slate-800">
+                  Data Analytics
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("service.dataStrategy")}
+                <Link href="/services" className="text-sm text-slate-700 hover:text-slate-800">
+                  AI Solutions
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("service.predictive")}
+                <Link href="/services" className="text-sm text-slate-700 hover:text-slate-800">
+                  Predictive Modeling
                 </Link>
               </li>
               <li>
-                <Link href="/services" className="text-sm text-slate-700 hover:text-brand-red">
-                  {t("nav.services")}
+                <Link href="/services" className="text-sm text-slate-700 hover:text-slate-800">
+                  Consulting
                 </Link>
               </li>
             </ul>
           </div>
         </div>
         <div className="mt-8 border-t border-slate-200 pt-8 text-center">
-          <p className="text-sm text-slate-700">
-            &copy; {new Date().getFullYear()} Exdata. {t("footer.copyright")}
-          </p>
+          <p className="text-sm text-slate-700">&copy; {new Date().getFullYear()} Exdata. All rights reserved.</p>
         </div>
       </div>
     </footer>
   )
 }
-
